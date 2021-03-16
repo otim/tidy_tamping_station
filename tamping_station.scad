@@ -26,7 +26,8 @@ portafilter_ears_cutout_width=30;
 portafilter_ears_tilt_angle=atan2((portafilter_ears_height_2-portafilter_ears_height_1), portafilter_ears_width);
 echo(portafilter_ears_tilt_angle);
 
-station_height=tamper_base_diameter+10;
+station_base_offset=0;
+station_height=tamper_base_diameter+10+station_base_offset;
 
 // Create a hull of two to four circles
 // Usage: RoundedCornerPolygon([x1, y1, r1], ..., [x4, y4, r4])
@@ -82,7 +83,7 @@ module Funnel() {
 }
 
 module Cutout(height, diameter) {
-    translate([0, -0.5*0.5*(outer_diameter+inner_diameter), height+0.5*diameter])
+    translate([0, -0.5*0.5*(outer_diameter+inner_diameter), station_base_offset+height+0.5*diameter])
         rotate(90, [1,0,0])
             translate([0, 0, -wall_thickness])
                 linear_extrude(height=2*wall_thickness)
@@ -104,7 +105,7 @@ module EarCutout() {
             cube([0.5*outer_diameter, portafilter_ears_cutout_width, station_height]);
         translate([0, 0, 0.5*(portafilter_ears_height_2+portafilter_ears_height_1)])
             rotate(portafilter_ears_tilt_angle, [1,0,0])
-                translate([0, -0.5*outer_diameter, 0])
+                translate([0, -0.5*outer_diameter, station_base_offset])
                     cube([0.5*outer_diameter, outer_diameter, station_height]);
     }
 }
